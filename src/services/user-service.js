@@ -54,7 +54,9 @@ class UserService {
                 throw new Error('Invalid credentials');
             }
 
-            const token =  this.createToken(user);
+            const token =  this.createToken(user.email);
+
+            console.log("Token value is:",token);
 
             return token;
         } catch (error) {
@@ -64,7 +66,7 @@ class UserService {
     
     createToken(user) {
         try {
-            const token = jwt.sign({user},JWT_KEY,{expiresIn:'1d'});
+            const token = jwt.sign({email: user},JWT_KEY,{expiresIn:'1d'});
 
             return token;
         } catch (error) {

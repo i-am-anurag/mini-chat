@@ -66,9 +66,12 @@ const requestvalidator = async(req,res,next) => {
             });
         }
 
-        const userService = new UserService();
-        const user = await userService.getUserById(verifytoken.user._id);
+        console.log("Verify Token Value is:",verifytoken);
 
+        const userService = new UserService();
+        const user = await userService.getUserByEmail(verifytoken.email);
+        console.log("User",user);
+        //Checking the user is exist in database or not
         if(!user) {
             return res.status(404).json({
                 success:false ,

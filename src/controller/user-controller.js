@@ -44,7 +44,33 @@ const login = async(req, res) => {
     }
 }
 
+const userProfile = async (req,res)=>{
+    try {
+        const userEmail = req.user.email;
+        const user = await userService.getUserByEmail(userEmail);
+        if(!user){
+            throw Error('User Not Found');
+        }
+        delete user.password; // Remove password from output
+
+        res.status(200).json({
+            success: true,
+            message: "User logged in successfully",
+            data: user,
+            error: {},
+        })
+    } catch (error) {
+         return res.status(500).json({
+            success: false,
+            message: "Error in get User Profile",
+            data: {},
+            error: error.message,
+        });
+    }
+}
+
 module.exports = {
     signUp,
     login,
+    userProfile,
 }

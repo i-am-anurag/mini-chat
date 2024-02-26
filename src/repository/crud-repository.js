@@ -26,7 +26,7 @@ class CrudRepository{
 
     async findBy(data) {
         try {
-            const result = await this.model.findOne(data);
+            const result = await this.model.findOne(data).lean();
             return result;
         } catch (error) {
             console.log("Something went wrong in crud repo");
