@@ -4,7 +4,7 @@ class ServerService {
     constructor(){
         this.serverRepository = new ServerRepository();
     }
-    async createUser(serverData,userId) {
+    async createServer(serverData,userId) {
         try {
             const server = await this.serverRepository.findBy({createdBy: userId,name:serverData.name});
             if(server){
