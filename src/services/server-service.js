@@ -14,6 +14,8 @@ class ServerService {
                 };
             }
 
+            serverData.users = [serverData.createdBy];
+
             let newServer = await this.serverRepository.create(serverData);
 
             return newServer;

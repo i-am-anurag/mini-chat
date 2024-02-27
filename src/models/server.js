@@ -20,6 +20,7 @@ const serverSchema = new mongoose.Schema({
         type: Number,
         min:1,
         max: 10, // Max number of users
+        default: 1,
     }
 });
 
