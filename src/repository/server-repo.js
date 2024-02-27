@@ -3,7 +3,7 @@ const CrudRepository = require('./crud-repository');
 
 class ServerRepository extends CrudRepository {
     constructor() {
-        super(User);
+        super(Server);
     }
 };
 
