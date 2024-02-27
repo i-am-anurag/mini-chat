@@ -26,10 +26,11 @@ class CrudRepository{
 
     async findBy(data) {
         try {
+            console.log("FindBy method data:",data);
             const result = await this.model.findOne(data).lean();
             return result;
         } catch (error) {
-            console.log("Something went wrong in crud repo");
+            console.log("Something went wrong in crud repo in findBy method with error message:",error);
             throw error;
         }
     }

@@ -13,15 +13,20 @@ class UserService {
         try {
             const user = await this.userRepository.findBy({email: userdata.email});
             if(user){
-                throw new Error('User already exist');
+               throw {
+                    statusCode: 403,
+                    message: "User already exist"
+               }
             }
 
             let newUser = await this.userRepository.create(userdata);
 
             return newUser;
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw {
+                statusCode: error.statusCode || 500,
+                message: error.message,
+           }
         }
     }
 
@@ -46,32 +51,45 @@ class UserService {
         try {
             const user = await this.getUserByEmail(data.email);
             if(!user) {
-                throw new Error('Invalid Credentials');
+                throw {
+                    statusCode: 400,
+                    message: "Invalid Credentials"
+                }
             }
             // compare passwords
             const comparePasswords = bcrypt.compareSync(data.password,user.password);
             if(!comparePasswords) {
-                throw new Error('Invalid credentials');
+                throw {
+                    statusCode: 400,
+                    message: "Invalid Credentials"
+                }
             }
 
-            const token =  this.createToken(user.email);
+            console.log("User Vale is:",user)
+            const token =  this.createToken({email:user.email,id: user._id});
 
             console.log("Token value is:",token);
 
             return token;
         } catch (error) {
-            throw new Error(error.message);
+            throw {
+                statusCode: error.statusCode || 500,
+                message: error,
+            }
         }
     }
     
     createToken(user) {
         try {
-            const token = jwt.sign({email: user},JWT_KEY,{expiresIn:'1d'});
+            const token = jwt.sign(user,JWT_KEY,{expiresIn:'1d'});
 
             return token;
         } catch (error) {
             console.log(error);
-            throw new Error('Error in creating token');
+            throw {
+                statusCode: error.statusCode || 500,
+                message: "Something Went wrong in token creation",
+            }
         }
     }
 }

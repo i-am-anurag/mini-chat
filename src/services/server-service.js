@@ -4,19 +4,25 @@ class ServerService {
     constructor(){
         this.serverRepository = new ServerRepository();
     }
-    async createServer(serverData,userId) {
+    async createServer(serverData) {
         try {
-            const server = await this.serverRepository.findBy({createdBy: userId,name:serverData.name});
+            const server = await this.serverRepository.findBy({createdBy:serverData.createdBy,name:serverData.name});
             if(server){
-                throw new Error('This server is already exists');
+                throw {
+                    statusCode : 401,
+                    message: "This name is already taken.",
+                };
             }
 
-            let newServer = await this.serverRepository.create(userdata);
+            let newServer = await this.serverRepository.create(serverData);
 
             return newServer;
         } catch (error) {
             console.error(error);
-            throw new Error(error);
+            throw {
+                statusCode : error.statusCode || 500,
+                message : error.message,
+            }
         }
     }
 

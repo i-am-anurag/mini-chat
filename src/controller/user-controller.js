@@ -46,8 +46,9 @@ const login = async(req, res) => {
 
 const userProfile = async (req,res)=>{
     try {
-        const userEmail = req.user.email;
-        const user = await userService.getUserByEmail(userEmail);
+        const userId = req.user._id;
+        console.log("UserID",userId);
+        const user = await userService.getUserById(userId);
         if(!user){
             throw Error('User Not Found');
         }

@@ -8,16 +8,18 @@ const serverSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "user",
+            ref: "User",
         }
     ],
     maxUsers:{
         type: Number,
-        default: 20,
+        min:1,
+        max: 10, // Max number of users
     }
 });
 

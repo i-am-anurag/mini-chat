@@ -5,6 +5,6 @@ const { createServer } = require('../controller/server-controller');
 
 const router = express.Router();
 
-router.post('/create-server',requestvalidator,createServer)
+router.post('/create-server',requestvalidator,createServer);
 
 module.exports = router;
