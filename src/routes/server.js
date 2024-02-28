@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.post('/create-server',requestvalidator,createServer);
 router.delete('/:serverId',requestvalidator,deleteServer);
-router.post('/:serverId',requestvalidator,addUser);
+router.put('/:serverId',requestvalidator,addUser);
 
 module.exports = router;

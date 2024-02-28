@@ -7,6 +7,7 @@ class ServerService {
 
     async createServer(serverData) {
         try {
+            console.log('Creating server with data: ' + JSON.stringify(serverData));
             const server = await this.serverRepository.findBy({createdBy:serverData.createdBy,name:serverData.name});
             if(server){
                 throw {
@@ -73,7 +74,8 @@ class ServerService {
 
     async addUsers(serverId,createdBy,userId) {
         try {
-            const server = await this.serverRepository.findBy({createdBy,id: serverId});
+            console.log("Inside addUsers ",createdBy,userId,serverId);
+            const server = await this.serverRepository.findBy({createdBy,_id: serverId});
             if(!server){
                 throw {
                     statusCode : 404,

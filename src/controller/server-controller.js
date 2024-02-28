@@ -17,7 +17,7 @@ const createServer = async(req, res) => {
 
         return res.status(201).json({
             success: true,
-            message: "Successfully registered a user",
+            message: "Successfully created a user",
             data: response,
             error: {},
         })
@@ -27,7 +27,7 @@ const createServer = async(req, res) => {
         return res.status(500).json({
             success: false,
             data: {},
-            error: error
+            error: error.message
         });
     }
 }
@@ -67,7 +67,7 @@ const addUser = async(req, res) => {
         const {serverId} = req.params;
         const userId = req.user._id;
         
-        const server = serverService.addUsers(serverId,userId);
+        const server = await serverService.addUsers(serverId,userId);
 
         return res.status(200).json({
             success: true,
@@ -79,7 +79,7 @@ const addUser = async(req, res) => {
         return res.status(statusCode).json({
             success: false,
             data: {},
-            error: error
+            error: error.message
         });
     }
 }
