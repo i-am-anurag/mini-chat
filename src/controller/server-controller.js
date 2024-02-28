@@ -32,6 +32,37 @@ const createServer = async(req, res) => {
     }
 }
 
+// const updateServer = (req, res) => {
+//     try {
+//         const {serverId} = req.params;
+
+//     } catch (error) {
+        
+//     }
+// }
+
+const deleteServer = async(req, res) => {
+    try {
+        const {serverId} = req.params;
+        await serverService.deleteServer(serverId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Sucessfully deleted server",
+            data: response,
+            error: {},
+        })
+    } catch (error) {
+        const statusCode =  error.statusCode ?? 503;
+        return res.status(statusCode).json({
+            success: false,
+            data: {},
+            error: error
+        });
+    }
+}
+
 module.exports = {
     createServer,
+    deleteServer,
 }

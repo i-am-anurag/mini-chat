@@ -4,6 +4,7 @@ class ServerService {
     constructor(){
         this.serverRepository = new ServerRepository();
     }
+
     async createServer(serverData) {
         try {
             const server = await this.serverRepository.findBy({createdBy:serverData.createdBy,name:serverData.name});
@@ -28,7 +29,48 @@ class ServerService {
         }
     }
 
-    
+    async updateServer(serverId,serverData) {
+        try {
+            let server = await this.serverRepository.findBy({createdBy:serverData.createdBy,name:serverData.name});
+            if(server){
+                throw {
+                    statusCode : 401,
+                    message: "This name is already taken.",
+                };
+            }
+            server = await this.serverRepository.update(serverId,serverData);
+
+            return server;
+        } catch (error) {
+            console.error(error);
+            throw {
+                statusCode : error.statusCode || 500,
+                message : error.message,
+            }
+        }
+    }
+
+    async deleteServer(serverId) {
+        try {
+            const server = await this.serverRepository.delete(serverId);
+
+            if(!server){
+                throw {
+                    statusCode : 401,
+                    message: "Server Not Found",
+                }
+            }
+            
+            return "Server Deleted Successfully";
+        } catch (error) {
+            console.error(error);
+            throw {
+                statusCode : error.statusCode || 500,
+                message : error.message,
+            }
+        }
+    }
+
 }
 
 module.exports = ServerService;
