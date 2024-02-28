@@ -27,7 +27,7 @@ class CrudRepository{
     async findBy(data) {
         try {
             console.log("FindBy method data:",data);
-            const result = await this.model.findOne(data).lean();
+            const result = await this.model.findOne(data);
             return result;
         } catch (error) {
             console.log("Something went wrong in crud repo in findBy method with error message:",error);

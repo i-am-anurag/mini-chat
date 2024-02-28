@@ -71,6 +71,30 @@ class ServerService {
         }
     }
 
+    async addUsers(serverId,createdBy,userId) {
+        try {
+            const server = await this.serverRepository.findBy({createdBy,id: serverId});
+            if(!server){
+                throw {
+                    statusCode : 404,
+                    message : "Server Not Found",
+                }
+            }
+            if(!server.users.includes(userId)){
+                server.users.push(userId);
+                server.save();
+            }
+
+            return server;
+        } catch (error) {
+            console.error(error);
+            throw {
+                statusCode : error.statusCode || 500,
+                message : error.message,
+            }
+        }
+    }
+
 }
 
 module.exports = ServerService;

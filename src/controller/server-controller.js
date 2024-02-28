@@ -23,7 +23,7 @@ const createServer = async(req, res) => {
         })
     } catch (error) {
         console.log("Something went wrong when creating sever with error message",error);
-        const statusCode =  error.statusCode ?? 503;
+        const statusCode =  error.statusCode ?? 500;
         return res.status(500).json({
             success: false,
             data: {},
@@ -53,7 +53,29 @@ const deleteServer = async(req, res) => {
             error: {},
         })
     } catch (error) {
-        const statusCode =  error.statusCode ?? 503;
+        const statusCode =  error.statusCode ?? 500;
+        return res.status(statusCode).json({
+            success: false,
+            data: {},
+            error: error
+        });
+    }
+}
+
+const addUser = async(req, res) => {
+    try {
+        const {serverId} = req.params;
+        const userId = req.user._id;
+        
+        const server = serverService.addUsers(serverId,userId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Successfully added user",
+            data: server,
+        });
+    } catch (error) {
+        const statusCode =  error.statusCode ?? 500;
         return res.status(statusCode).json({
             success: false,
             data: {},
@@ -65,4 +87,5 @@ const deleteServer = async(req, res) => {
 module.exports = {
     createServer,
     deleteServer,
+    addUser,
 }
