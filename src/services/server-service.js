@@ -1,4 +1,6 @@
+const crypto = require('crypto');
 const ServerRepository = require('../repository/server-repo');
+const { URL_KEY } = require('../config/server-config');
 
 class ServerService {
     constructor(){
@@ -72,10 +74,12 @@ class ServerService {
         }
     }
 
-    async addUsers(serverId,createdBy,userId) {
+    async addUsers(encrypedServerId,userId) {
         try {
-            console.log("Inside addUsers ",createdBy,userId,serverId);
-            const server = await this.serverRepository.findBy({createdBy,_id: serverId});
+            const decipher = crypto.createDecipher('aes256', URL_KEY); 
+            const serverId = decipher.update(encrypedServerId, 'hex', 'utf8') + decipher.final('utf8');
+
+            const server = await this.serverRepository.findBy({_id: serverId});
             if(!server){
                 throw {
                     statusCode : 404,
@@ -88,6 +92,26 @@ class ServerService {
             }
 
             return server;
+        } catch (error) {
+            console.error(error);
+            throw {
+                statusCode : error.statusCode || 500,
+                message : error.message,
+            }
+        }
+    }
+
+    async getServerUrl(serverName,userId){
+        try {
+            const url = await this.serverRepository.findBy({name: serverName,createdBy: userId});
+            if(!url){
+                throw {
+                    statusCode : 404,
+                    message : "Server Not Found",
+                }
+            }
+
+            return url;
         } catch (error) {
             console.error(error);
             throw {

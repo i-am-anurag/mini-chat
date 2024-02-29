@@ -84,8 +84,30 @@ const addUser = async(req, res) => {
     }
 }
 
+const getServerUrl = async(req, res) => {
+    try {
+        const {server_name:name} = req.body;
+        const userId = req.user._id;
+
+        const url = await serverService.getServerUrl(name,userId);
+
+        return res.status(200).json({
+            success: true,
+            message : "Server URL get sucessfully",
+            data: url,
+        })
+    } catch (error) {
+        return res.status(statusCode).json({
+            success: false,
+            data: {},
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     createServer,
     deleteServer,
     addUser,
+    getServerUrl,
 }
